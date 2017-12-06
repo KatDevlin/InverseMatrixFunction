@@ -1,0 +1,57 @@
+---
+title: "Inverse Matrix Function"
+author: "Kat Devlin"
+date: "2017年12月6日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Inverse Matrix Function
+
+This is a project I completed as part of Coursera's [R Programming](https://www.coursera.org/learn/r-programming) course. In this assignment students had to write a function that will either calculate the inverse of a user-provided matrix, or, if the calculation already exists in the cache, will recall the inverse from the cache. The project instructions stipulated that we assume all matrices being input into the function are invertible.
+
+
+```{r function}
+makeCacheMatrix <- function(x = matrix()) {
+  m <- NULL
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setmatrix <- function(solve) m <<- solve
+  getmatrix <- function() m
+  list(set = set, get = get,
+       setmatrix = setmatrix,
+       getmatrix = getmatrix)
+}
+
+cacheSolve <- function(x, ...) {
+  m <- x$getmatrix()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
+  }
+  data <- x$get()
+  m <- solve(data, ...)
+  x$setmatrix(m)
+  m
+}
+
+```
+
+## Running a Check
+
+
+```{r check}
+B <- matrix(c(1,2,3,4),2,2)
+B1 <- makeCacheMatrix(B)
+cacheSolve(B1) # computed
+cacheSolve(B1) # returned from cache
+solve(B)
+```
+
+All seems to be working. This can be used with any size matrix, as long as it is invertible.
